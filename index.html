@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b0b0d">
+<link rel="manifest" href="manifest.json">
+<title>Luma — Creative Studio</title>
+<style>
+:root{--bg:#0b0b0d;--card:#151519;--card2:#1d1d22;--text:#f6f5f2;--muted:#9b9aa3;--line:#29292f;--accent:#d9ff61;--radius:24px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+button,input{font:inherit} button{border:0;color:inherit;background:none}
+.app{max-width:680px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 18px calc(92px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 2px 14px;position:sticky;top:0;background:linear-gradient(var(--bg) 75%,transparent);z-index:5}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.6px}.pill{background:#202025;border:1px solid var(--line);padding:9px 13px;border-radius:999px;font-size:13px;color:#ddd}
+.view{display:none}.view.active{display:block}.eyebrow{text-transform:uppercase;letter-spacing:1.5px;font-size:11px;color:var(--muted);font-weight:700}
+h1{font-size:38px;line-height:1.02;letter-spacing:-1.8px;margin:8px 0 22px}h2{font-size:24px;letter-spacing:-.7px;margin:28px 0 14px}
+.hero{background:linear-gradient(135deg,#2c2b31,#17171b);border:1px solid var(--line);border-radius:30px;padding:22px;min-height:230px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--accent);filter:blur(60px);opacity:.22;right:-30px;top:-30px}
+.hero>*{position:relative;z-index:1}.hero h3{font-size:27px;margin:8px 0;max-width:360px}.hero p{color:#bbb;max-width:400px;line-height:1.45}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.action{padding:17px;border:1px solid var(--line);border-radius:20px;background:var(--card);text-align:left}.action b{display:block;margin-bottom:5px}.action span{font-size:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:var(--card);border:1px solid var(--line);padding:16px;border-radius:20px}.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:11px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center}.sectionhead h2{margin-bottom:10px}.textbtn{color:var(--accent);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.tile{aspect-ratio:1;border-radius:22px;background:#19191e;border:1px solid var(--line);overflow:hidden;position:relative}.tile img{width:100%;height:100%;object-fit:cover}.tile .label{position:absolute;left:10px;bottom:10px;background:#000a;padding:7px 9px;border-radius:12px;font-size:11px}
+.nav{position:fixed;bottom:0;left:0;right:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0b0b0ddd;backdrop-filter:blur(22px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav button{font-size:11px;color:var(--muted);padding:8px}.nav button.active{color:var(--accent)}.nav i{font-style:normal;font-size:20px;display:block;margin-bottom:3px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin:10px 0}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.muted{color:var(--muted)}.big{font-size:32px;font-weight:800;letter-spacing:-1px}.progress{height:8px;background:#27272d;border-radius:99px;overflow:hidden;margin-top:12px}.progress i{display:block;height:100%;width:72%;background:var(--accent);border-radius:99px}
+.studio{background:#111114;border:1px solid var(--line);border-radius:28px;overflow:hidden}.canvas{height:390px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 70% 25%,#4b4850,#17171b 48%,#101012);position:relative}.canvas img{max-width:100%;max-height:100%;object-fit:contain}.empty{padding:28px;text-align:center;color:var(--muted)}.toolbar{display:flex;gap:8px;overflow:auto;padding:12px}.tool{white-space:nowrap;background:var(--card2);padding:11px 14px;border-radius:14px;font-size:13px}.tool.on{background:var(--accent);color:#111}.primary{background:var(--accent);color:#101010;padding:14px 18px;border-radius:16px;font-weight:750;width:100%}
+input[type=file]{display:none}.upload{display:block;text-align:center;background:var(--accent);color:#111;padding:14px;border-radius:16px;font-weight:750;margin:12px}
+.slider{width:100%;accent-color:var(--accent)}.compare{position:relative;overflow:hidden}.compare .after{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}.handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:white;box-shadow:0 0 12px #000}.compare img{width:100%;height:100%;object-fit:cover}.compare{aspect-ratio:4/5}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#eee;color:#111;padding:11px 15px;border-radius:14px;opacity:0;pointer-events:none;transition:.25s;z-index:20;font-size:13px}.toast.show{opacity:1}
+@media(min-width:600px){.app{padding-left:28px;padding-right:28px}.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">luma</div><button class="pill" id="storage">On device · private</button></header>
+
+<section id="home" class="view active">
+<div class="eyebrow">Creative studio</div><h1>Make something<br>worth keeping.</h1>
+<div class="hero"><div><div class="eyebrow">Today</div><h3>Your visual streak is alive.</h3><p>Create, remix, compare and collect your favorite looks — all from this device.</p></div><button class="pill" onclick="go('create')">Open studio →</button></div>
+<div class="actions"><button class="action" onclick="go('create')"><b>＋ New creation</b><span>Photo, collage or mood</span></button><button class="action" onclick="document.getElementById('file').click()"><b>↥ Import photo</b><span>Saved locally on iPhone</span></button></div>
+<div class="stats"><div class="stat"><strong id="statProjects">0</strong><span>Creations</span></div><div class="stat"><strong id="statFav">0</strong><span>Favorites</span></div><div class="stat"><strong id="statStreak">1</strong><span>Day streak</span></div></div>
+<div class="sectionhead"><h2>Recent</h2><button class="textbtn" onclick="go('explore')">See all</button></div><div class="grid" id="recent"></div>
+</section>
+
+<section id="create" class="view">
+<div class="eyebrow">Studio</div><h1>Create</h1>
+<div class="studio"><div class="canvas" id="canvas"><div class="empty">Choose a photo to start<br><small>Nothing leaves this device.</small></div></div>
+<div class="toolbar"><button class="tool on" data-filter="none">Original</button><button class="tool" data-filter="mono">Mono</button><button class="tool" data-filter="warm">Warm</button><button class="tool" data-filter="cool">Cool</button><button class="tool" data-filter="dream">Dream</button></div>
+<label class="upload" for="file">＋ Choose photo</label>
+</div>
+<div class="card"><div class="row"><b>Intensity</b><span id="intensity">70%</span></div><input class="slider" id="intensitySlider" type="range" min="0" max="100" value="70"></div>
+<button class="primary" id="saveBtn">Save creation</button>
+<h2>Compare</h2><div class="compare card" id="compare"><div class="empty">Add a photo to compare original and edited versions.</div></div>
+</section>
+
+<section id="explore" class="view">
+<div class="eyebrow">Explore</div><h1>Looks to remix.</h1>
+<div class="grid" id="exploreGrid"></div>
+</section>
+
+<section id="insights" class="view">
+<div class="eyebrow">Insights</div><h1>Your creative pulse.</h1>
+<div class="card"><div class="row"><div><div class="muted">This week</div><div class="big" id="totalProjects">0</div></div><div class="pill">+12%</div></div><div class="progress"><i></i></div></div>
+<div class="card"><div class="row"><b>Activity</b><span class="muted">Last 7 days</span></div><div style="height:180px;display:flex;align-items:end;gap:8px;padding-top:20px" id="bars"></div></div>
+<div class="card"><div class="row"><b>On-device storage</b><span id="storageSize">0 KB</span></div><p class="muted">Photos and project metadata are stored locally in your browser. You can clear them from your browser/site data.</p></div>
+</section>
+</div>
+
+<input id="file" type="file" accept="image/*">
+<div class="toast" id="toast"></div>
+<nav class="nav"><button class="active" data-view="home"><i>⌂</i>Home</button><button data-view="create"><i>＋</i>Create</button><button data-view="explore"><i>◉</i>Explore</button><button data-view="insights"><i>◒</i>Insights</button></nav>
+
+<script>
+const KEY='luma.projects.v1'; let projects=JSON.parse(localStorage.getItem(KEY)||'[]'); let current=null, filter='none', intensity=70;
+const demo=['#d7c7b5','#87959d','#b3a7c7','#a9b38c','#d09a7e','#8e8f9b'];
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+function save(){localStorage.setItem(KEY,JSON.stringify(projects));render()}
+function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===v)); if(v==='insights')renderBars()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+function svgData(c,i){let s=`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${c}"/><stop offset="1" stop-color="#17171b"/></linearGradient></defs><rect width="800" height="1000" fill="url(#g)"/><circle cx="${180+i*80}" cy="280" r="150" fill="#fff" opacity=".16"/><text x="50" y="900" fill="#fff" font-size="38" font-family="Arial">LUMA / LOOK ${i+1}</text></svg>`;return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)}
+function render(){document.getElementById('statProjects').textContent=projects.length;document.getElementById('statFav').textContent=projects.filter(p=>p.fav).length;document.getElementById('totalProjects').textContent=projects.length;
+let all=projects.length?projects:demo.map((c,i)=>({id:'d'+i,img:svgData(c,i),name:['Soft light','Coastal','Nocturne','Olive','Sunset','Silver'][i],fav:i===1||i===4}));
+document.getElementById('recent').innerHTML=all.slice(-6).reverse().map((p,i)=>`<div class="tile" onclick="openProject('${p.id}')"><img src="${p.img}"><div class="label">${p.name||'Untitled'}</div></div>`).join('');
+document.getElementById('exploreGrid').innerHTML=all.map((p,i)=>`<div class="tile" onclick="remix('${p.id}')"><img src="${p.img}"><div class="label">${p.fav?'♥ ':''}${p.name||'Look'}</div></div>`).join('');
+}
+function openProject(id){let p=projects.find(x=>x.id===id);if(!p)return;current=p;filter=p.filter||'none';document.getElementById('canvas').innerHTML=`<img src="${p.img}" style="${cssFilter(filter,intensity)}">`;document.getElementById('compare').innerHTML=`<img src="${p.img}"><div class="after"><img src="${p.img}" style="${cssFilter(filter,intensity)}"></div><div class="handle"></div>`;go('create')}
+function remix(id){let p=projects.find(x=>x.id===id);if(!p){toast('Demo look — choose a photo to remix');go('create');return} current=null;document.getElementById('canvas').innerHTML=`<img src="${p.img}">`;go('create')}
+function cssFilter(f,i){let x=i/100;return f==='mono'?`filter:grayscale(${x})`:f==='warm'?`filter:saturate(${1+x*.7}) sepia(${x*.22})`:f==='cool'?`filter:saturate(${1+x*.5}) hue-rotate(${x*12}deg)`:f==='dream'?`filter:saturate(${1+x*.5}) brightness(${1+x*.1}) contrast(${1-x*.15})`:''}
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b));updatePreview()});
+document.getElementById('intensitySlider').oninput=e=>{intensity=+e.target.value;document.getElementById('intensity').textContent=intensity+'%';updatePreview()};
+function updatePreview(){let img=document.querySelector('#canvas img');if(img)img.style=cssFilter(filter,intensity);let c=document.querySelector('#compare');if(img)c.innerHTML=`<img src="${img.src}"><div class="after"><img src="${img.src}" style="${cssFilter(filter,intensity)}"></div><div class="handle"></div>`}
+document.getElementById('file').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{current={id:crypto.randomUUID(),img:r.result,name:f.name.replace(/\.[^.]+$/,''),filter:'none',fav:false,created:Date.now()};filter='none';document.getElementById('canvas').innerHTML=`<img src="${r.result}">`;updatePreview();toast('Photo loaded locally')};r.readAsDataURL(f)};
+document.getElementById('saveBtn').onclick=()=>{if(!current){toast('Choose a photo first');return}let p={...current,filter,name:current.name||'My creation',created:Date.now()};let ix=projects.findIndex(x=>x.id===p.id);if(ix>=0)projects[ix]=p;else projects.push(p);save();toast('Saved on this iPhone')};
+function renderBars(){let vals=[2,4,3,6,5,8,7];let max=Math.max(...vals);document.getElementById('bars').innerHTML=vals.map((v,i)=>`<div title="${v} creations" style="flex:1;height:${30+v/max*110}px;background:var(--accent);border-radius:9px 9px 4px 4px;opacity:${.45+i*.07}"></div>`).join('')}
+render();renderBars();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body></html>
